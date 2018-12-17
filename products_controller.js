@@ -3,7 +3,7 @@ module.exports = {
       const dbInstance = req.app.get('db');
       const { name, description, price, image_url } = req.body;
 
-      dbInstance.delete_product([ name, description, price, image_url ])
+      dbInstance.create_product([ name, description, price, image_url ])
       .then( () => res.sendStatus(200) )
       .catch( err => {
       res.status(500).send({errorMessage: "Oops! Something went wrong. Our engineers have been informed!"});
@@ -14,31 +14,31 @@ module.exports = {
     getOne: ( req, res, next ) => {
       const dbInstance = req.app.get('db');
       const { params } = req;
-
-      dbInstance.delete_product( params.id )
-      .then( () => res.sendStatus(200).send ( products ) )
-      .catch( err => {
-      res.status(500).send({errorMessage: "Oops! Something went wrong. Our engineers have been informed!"});
-      console.log(err)
-      } );
+  
+      dbInstance.read_product([ params.id ])
+        .then( product => res.status(200).send( product ) )
+        .catch( err => {
+          res.status(500).send({errorMessage: "Oops! Something went wrong. Our engineers have been informed!"});
+          console.log(err)
+        } );
     },
   
     getAll: ( req, res, next ) => {
       const dbInstance = req.app.get('db');
-      
-      dbInstance.delete_product()
-      .then( () => res.sendStatus(200).send ( products ) )
-      .catch( err => {
-      res.status(500).send({errorMessage: "Oops! Something went wrong. Our engineers have been informed!"});
-      console.log(err)
-      } );
+  
+      dbInstance.read_products()
+        .then( products => res.status(200).send( products ) )
+        .catch( err => {
+          res.status(500).send({errorMessage: "Oops! Something went wrong. Our engineers have been informed!"});
+          console.log(err)
+        } );
     },
   
     update: ( req, res, next ) => {
       const dbInstance = req.app.get('db');
       const { params, query } = req;
 
-      dbInstance.delete_product([ params.id, query.desc ])
+      dbInstance.update_product([ params.id, query.desc ])
       .then( () => res.sendStatus(200) )
       .catch( err => {
       res.status(500).send({errorMessage: "Oops! Something went wrong. Our engineers have been informed!"});
